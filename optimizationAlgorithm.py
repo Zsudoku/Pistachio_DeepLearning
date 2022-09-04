@@ -3,6 +3,14 @@ import numpy as np
 import copy as cp
 #from mysql_deepLearningData import *
 
+
+#去重
+def delList(L):
+    L1 = []
+    for i in L:
+        if i not in L1:
+            L1.append(i)
+    return L1
 class OptimizationAlgorithm:
 
     def __init__(self,__lis) -> None:
@@ -15,6 +23,8 @@ class OptimizationAlgorithm:
     # @property
     # def ddjData
 
+
+    
 
     def outputGenerator(self, sequence, fitness):
         return {
@@ -32,13 +42,18 @@ class OptimizationAlgorithm:
         return: 种群（entityCount 个随机打乱的序列，类型为 list）
         """
         population = []
-        for i in range(entityCount):
+        for i in range(entityCount-1):
             # 生成 entityCount 个从 1 ~ seqLen 的随机序列
             entity = list(range(1, (seqLen+1), 1))
             rd.shuffle(entity)
             population.append(entity)    
+            
+        entity = list(range(1, (seqLen+1), 1))
+        population.append(entity)    
         
-        print(population)
+        population = delList(population)
+        
+        #print(population)
 
         return population
         pass
@@ -66,7 +81,7 @@ class OptimizationAlgorithm:
         return: 每个个体被选择的概率
         """
         # fitnessAry = np.array(fitnessList)
-        fitnessAry = 1 / np.array(fitnessList)
+        fitnessAry = abs(1 / np.array(fitnessList))
         p = ( fitnessAry / sum(fitnessAry) )
         # p = (max(fitnessAry) - fitnessAry) / (max(fitnessAry) - min(fitnessAry))
         return p.tolist()
@@ -102,7 +117,9 @@ class OptimizationAlgorithm:
             offSprings.append(offSpring)
 
             pass
-
+        
+        offSprings = delList(offSprings)
+        
         return offSprings
 
         pass
@@ -204,13 +221,11 @@ class OptimizationAlgorithm:
         # 计算整个种群的适应度值
         fitnessList = self.allCost(costFun, population)
         # print(fitnessList)
-        # print(fitnessList)
+        print('fitnessList*******************',fitnessList)
 
         # 找到当前种群中最优的个体 
         bestEntityIndex = fitnessList.index( min(fitnessList) )  # 几下最优个体在种群中的索引值
-        x = np.array(fitnessList)
-        x.sort()
-        best10Index = np.argsort(abs(np.sort(-x)))
+        best10Index = np.array(fitnessList).argsort()[0:10:1]
         #print(population[bestEntityIndex], fitnessList[bestEntityIndex])
 
         # 创建一个列表来保存每次迭代中种群中的最优适应度值 
@@ -233,18 +248,16 @@ class OptimizationAlgorithm:
 
             bestEntityIndex = fitnessList.index( min(fitnessList) )
             #print( np.array(fitnessList))
-            x = np.array(fitnessList)
-            x.sort()
-            best10Index = np.argsort(abs(np.sort(-x)))
+            best10Index = np.array(fitnessList).argsort()[0:10:1]
 
             fitnessHistory.append(min(fitnessList))
-            #print(min(fitnessList))
+            # print(min(fitnessList))
 
 
             pass
 
-        print(fitnessHistory)
-        print("population",population)
+        # print(fitnessHistory)
+        # print("population",population)
         print("Best:\n", population[bestEntityIndex], "\n", fitnessList[bestEntityIndex])
         result = self.outputGenerator(population[bestEntityIndex], fitnessList[bestEntityIndex])
         print("result",result)
