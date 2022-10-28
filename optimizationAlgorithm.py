@@ -1,6 +1,7 @@
 import random as rd
 import numpy as np
 import copy as cp
+# from numpy import *
 #from mysql_deepLearningData import *
 
 
@@ -42,16 +43,17 @@ class OptimizationAlgorithm:
         return: 种群（entityCount 个随机打乱的序列，类型为 list）
         """
         population = []
-        for i in range(entityCount-1):
+        for i in range(entityCount-2):
             # 生成 entityCount 个从 1 ~ seqLen 的随机序列
             entity = list(range(1, (seqLen+1), 1))
             rd.shuffle(entity)
             population.append(entity)    
             
         entity = list(range(1, (seqLen+1), 1))
-        population.append(entity)    
-        
-        population = delList(population)
+        population.insert(0,entity)    
+        entity.reverse()
+        population.insert(0,entity) 
+        #population = delList(population)
         
         #print(population)
 
@@ -100,7 +102,7 @@ class OptimizationAlgorithm:
         """
         offSprings = []
         for index in best10Index:
-            offSprings.append(population[index])
+            offSprings.append(np.array(population)[index])
 
         while len(offSprings) < len(population):
             
@@ -118,7 +120,7 @@ class OptimizationAlgorithm:
 
             pass
         
-        offSprings = delList(offSprings)
+        #offSprings = delList(offSprings)
         
         return offSprings
 
@@ -186,11 +188,11 @@ class OptimizationAlgorithm:
         return: 被选中的个体的索引值
         """
         selection = -1
-        p = rd.uniform(0, sum(selectProb))
+        p = rd.uniform(0, sum(np.array(selectProb)))
         
         totalProb = 0
         for i in range(len(selectProb)):
-            totalProb += selectProb[i]
+            totalProb += np.array(selectProb)[i]
             if totalProb >= p:
                 selection = i
                 break
