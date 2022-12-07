@@ -1,17 +1,17 @@
 '''
 Date: 2022-10-11 20:04:55
 LastEditors: ZSudoku
-LastEditTime: 2022-10-27 20:22:37
+LastEditTime: 2022-11-24 14:06:52
 FilePath: \Pistachio_DeepLearning\DiyLSTMmod.py
 '''
 # coding=utf-8
-from distutils.command.config import config
+# from distutils.command.config import config
 from keras.layers.core import Flatten
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.layers import Dropout,BatchNormalization,Conv1D,MaxPool1D,Input,GRU
+from tensorflow.keras.layers import Dropout,BatchNormalization,Conv1D,MaxPool1D,Input,GRU,Bidirectional,LSTM
 #os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
 import keras
 import gc
@@ -26,7 +26,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'   # 要放在 import tensorflow as tf �
 import tensorflow as tf
 X_train = []
 batch_size = 128
-sequence_lenth = 7 #每个句子的长度
+#sequence_lenth = 7 #每个句子的长度 葡萄干
+sequence_lenth = 16
 input_size = 1    #每个时序的单独向量，代表每个字的含义
 output_size = 128
 x = X_train
@@ -123,6 +124,8 @@ class my_model(Model):
         self.FLATT = Flatten()
         self.GRU   = GRU(units=the_units,return_sequences=True)
         self.GRU2  = GRU(units=the_units)
+        self.BILSTM = Bidirectional(LSTM(the_units,return_sequences=True))
+        self.BILSTM2 = Bidirectional(LSTM(the_units))
         self.LSTM0 = CustomLSTM(output_size=the_units,return_sequences=True)
                         #kernel_initializer=tf.keras.initializers.glorot_normal(seed=2),bias_initializer=tf.keras.initializers.Zeros())
         self.LSTM1 = CustomLSTM(output_size=the_units,return_sequences=True)
@@ -156,13 +159,16 @@ class my_model(Model):
         #c = self.DROP(x1)
         ##c = self.BAT(x1)
 
+        #c = self.LSTM1(x1)
         c = self.LSTM1(inputdata)
         #c = self.GRU(inputdata)
+        #c = self.BILSTM(inputdata)
         c = self.DROP(c)
         c = self.BAT(c)
         
         d = self.LSTM2(c)
         #d = self.GRU2(c)
+        #d = self.BILSTM2(c)
         d = self.DROP(d)
         
                         
