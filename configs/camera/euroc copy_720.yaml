@@ -1,0 +1,39 @@
+%YAML:1.0
+
+image_height: 1280
+image_width: 720
+use_imu: 0
+
+depth_lower_thr: 0.1
+depth_upper_thr: 10.0
+max_y_diff: 1
+
+# Calibration
+distortion_type: 1  # 0 for undistorted inputs, 1 for radial-tangential: [k1, k2, p1, p2, k3], 2 for equidistant/fisheye:  [k1, k2, k3, k4, 0].
+cam0:
+  intrinsics: [667.3003, 670.0276, 596.8533,395.0267] # fx, fy, cx, cy
+  distortion_coeffs: [0.0895, -0.1429, 0.0029, -0.0001192, 0.0219]
+  T_type: 0           # 0 for Euroc format, the following T is Tbc. 1 for Kalibr format, the following T is Tcb
+  T: 
+  - [1.0, 0.0, 0.0, 0.0]
+  - [0.0, 1.0, 0.0, 0.0]
+  - [0.0, 0.0, 1.0, 0.0]
+  - [0.0, 0.0, 0.0, 1.0]
+cam1:
+  intrinsics: [673.4658, 675.6429, 602.4980, 396.7246] # fx, fy, cx, cy
+  distortion_coeffs: [0.1034, -0.189, 0.0024, -0.00063025, 0.0593]
+  T_type: 0           
+  T: 
+  - [1.0, 0.0, 0.0, 0.12]
+  - [0.0, 1.0, 0.0, 0.0]
+  - [0.0, 0.0, 1.0, 0.0]
+  - [0.0, 0.0, 0.0, 1.0]
+
+
+# IMU
+# rate_hz: 200
+# gyroscope_noise_density: 1.0e-04     # [ rad / s / sqrt(Hz) ]   ( gyro "white noise" )
+# gyroscope_random_walk: 1.0e-05       # [ rad / s^2 / sqrt(Hz) ] ( gyro bias diffusion )
+# accelerometer_noise_density: 1.0e-3  # [ m / s^2 / sqrt(Hz) ]   ( accel "white noise" )
+# accelerometer_random_walk: 1.0e-3    # [ m / s^3 / sqrt(Hz) ].  ( accel bias diffusion )
+# g_value: 9.8

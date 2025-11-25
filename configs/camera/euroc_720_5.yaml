@@ -1,0 +1,39 @@
+image_height: 720
+image_width: 1280
+use_imu: 0
+
+depth_lower_thr: 1
+depth_upper_thr: 20.0
+max_y_diff: 5
+
+# Calibration
+distortion_type: 1  # 0 for undistorted inputs, 1 for radial-tangential: [k1, k2, p1, p2, k3], 2 for equidistant/fisheye:  [k1, k2, k3, k4, 0].
+cam1:
+  intrinsics: [697.8496, 694.3638, 605.0420,393.3294] # fx, fy, cx, cy
+  distortion_coeffs: [0.1237, -0.2138 ,0.0082, 0.0002659,0.0408]
+  T_type: 0           # 0 for Euroc format, the following T is Tbc. 1 for Kalibr format, the following T is Tcb
+  T: 
+  - [1.0, 0.0, 0.0, -0.12]
+  - [0.0, 1.0, 0.0, 0.0]
+  - [0.0, 0.0, 1.0, 0.0]
+  - [0.0, 0.0, 0.0, 1.0]
+cam0:
+  intrinsics: [681.1601, 675.6265, 629.1856, 406.8519] # fx, fy, cx, cy
+  distortion_coeffs: [0.1153,-0.2377,0.0078,0.0044,0.0749]
+  T_type: 0           
+  T: 
+  - [1.0, 0.0, 0.0, 0.0]
+  - [0.0, 1.0, 0.0, 0.0]
+  - [0.0, 0.0, 1.0, 0.0]
+  - [0.0, 0.0, 0.0, 1.0]
+
+
+# IMU
+# rate_hz: 200
+# gyroscope_noise_density: 1.0e-04     # [ rad / s / sqrt(Hz) ]   ( gyro "white noise" )
+# gyroscope_random_walk: 1.0e-05       # [ rad / s^2 / sqrt(Hz) ] ( gyro bias diffusion )
+# accelerometer_noise_density: 1.0e-3  # [ m / s^2 / sqrt(Hz) ]   ( accel "white noise" )
+# accelerometer_random_walk: 1.0e-3    # [ m / s^3 / sqrt(Hz) ].  ( accel bias diffusion )
+# g_value: 9.8
+
+# ffmpeg -f dshow -i video="@device_pnp_\\?\usb#vid_15aa&pid_1555&mi_00#6&2654d621&0&0000#{65e8773d-8f56-11d0-a3b9-00a0c9223196}\global" -vcodec libx264 -r 25 -video_size 640x480 -tune:v zerolatency -preset:v ultrafast -threads 4 -c:a copy -fflags nobuffer -max_delay 1 -rtsp_transport tcp -crf 30 -vsync 2 -f flv -f rtsp rtsp://127.0.0.1:8554/camera_test
